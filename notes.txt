@@ -31,3 +31,15 @@ UX consideration (very underrated, very impressive):
 | -- Page number / section title
 - Versioning documents (optional but classy) since policies change
 | -- Policy version / date metadata; ability to say: “This answer is based on Policy v2023.1”
+
+PII handling:
+- Email → deterministic regex
+- Government ID → deterministic regex
+- Name (no need to redact)
+- Policy number: ask during run-time because it doesn't follow any pattern
+- prompt copy: To protect your privacy, this app removes personal identifiers before processing your policy.
+
+Please enter your policy number below. 
+It will be used only once in memory to redact the document and will not be stored, logged, or sent to the language model.
+
+WHERE I STOPPED: PDFLOADER not correctly ingesting pdf (could be due to it being scanned/other reasons)
