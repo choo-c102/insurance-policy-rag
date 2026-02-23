@@ -6,6 +6,7 @@ __pycache__/
 
 # Database & Secrets
 .env
+chroma_langchain_db
 
 # OS files
 .DS_Store
