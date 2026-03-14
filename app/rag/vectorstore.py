@@ -5,7 +5,7 @@ from app.rag.embeddings import get_embeddings
 
 def create_vector_store(
     chunks: list,
-    collection_name: str = "policy_chunks", 
+    collection_name: str = "default_collection", 
     embedding_function: Embeddings = None, 
     persist_directory: str = "./chroma_langchain_db"):
     ''' Create and return a Chroma vector store and persist to disk '''
@@ -22,7 +22,7 @@ def create_vector_store(
 
 
 def load_vector_store(
-    collection_name: str = "policy_chunks", 
+    collection_name: str = "default_collection", 
     embedding_function: Embeddings = None, 
     persist_directory: str = "./chroma_langchain_db"):
     ''' Load and return an existing Chroma vector store from disk '''

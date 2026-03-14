@@ -37,7 +37,7 @@ def format_docs(docs):
     
 def run_rag_chain(
     query: str,
-    collection_name: str = "policy_chunks",
+    collection_name: str = "default_collecion",
     prompt_name: str = "rlm/rag-prompt",
     provider: str = "anthropic"
 ):
