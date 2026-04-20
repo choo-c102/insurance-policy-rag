@@ -3,7 +3,6 @@
 __pycache__/
 *.pyc
 
-
 # Database & Secrets
 .env
 chroma_langchain_db
@@ -13,10 +12,8 @@ chroma_langchain_db
 Thumbs.db
 
 # Working notebooks
-notebooks/Fine-tuning BioMed-RoBERTa.ipynb
-notebooks/metamap_NER.ipynb
-notebooks/Training spaCy.ipynb
+notebooks/
 
 # Others
-notes.txt
-aia_ci_starter_policy.pdf
+data/aia_ci_starter_policy.pdf
+documentation/
