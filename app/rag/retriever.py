@@ -1,6 +1,6 @@
 import os
 from langchain_anthropic import ChatAnthropic
-from langchain import hub
+from langchain_classic import hub 
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from app.rag.vectorstore import create_vector_store, load_vector_store
@@ -37,11 +37,15 @@ def format_docs(docs):
     
 def run_rag_chain(
     query: str,
-    collection_name: str = "default_collecion",
+    collection_name: str = None,
     prompt_name: str = "rlm/rag-prompt",
     provider: str = "anthropic"
 ):
     ''' Full RAG chain that takes a query and returns an answer '''
+    
+    if collection_name is None:
+        raise ValueError("Collection name is required")
+    
     retriever = get_retriever(collection_name=collection_name)
     prompt = pull_rag_prompt(prompt_name=prompt_name)
     llm = load_llm(provider=provider)

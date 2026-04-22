@@ -5,10 +5,14 @@ from app.rag.embeddings import get_embeddings
 
 def create_vector_store(
     chunks: list,
-    collection_name: str = "default_collection", 
+    collection_name: str = None, 
     embedding_function: Embeddings = None, 
     persist_directory: str = "./chroma_langchain_db"):
     ''' Create and return a Chroma vector store and persist to disk '''
+    
+    if collection_name is None:
+        raise ValueError("Collection name is required")
+    
     if embedding_function is None:
         embedding_function = get_embeddings()
     
@@ -22,11 +26,14 @@ def create_vector_store(
 
 
 def load_vector_store(
-    collection_name: str = "default_collection", 
+    collection_name: str = None, 
     embedding_function: Embeddings = None, 
     persist_directory: str = "./chroma_langchain_db"):
     ''' Load and return an existing Chroma vector store from disk '''
 
+    if collection_name is None:
+        raise ValueError("Collection name is required")
+    
     if not os.path.exists(persist_directory):
         raise FileNotFoundError(f"Persist directory '{persist_directory}' does not exist. Please create the vector store first.")
     

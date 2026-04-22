@@ -6,6 +6,7 @@ def load_documents(file_path: str):
     Load PDF document from a given path 
     Returns a list of documents (each document is a page in the PDF)
     '''
+
     if not os.path.isfile(file_path):
         raise FileNotFoundError(f"No file found at path: {file_path}")
     
