@@ -1,15 +1,16 @@
-import os
 from langchain_chroma import Chroma
 from langchain_core.embeddings import Embeddings
 from app.rag.embeddings import get_embeddings
+from app.core.config import settings
+from pathlib import Path
 
 def create_vector_store(
     chunks: list,
     collection_name: str = None, 
-    embedding_function: Embeddings = None, 
-    persist_directory: str = "./chroma_langchain_db"):
+    embedding_function: Embeddings = None
+):
     ''' Create and return a Chroma vector store and persist to disk '''
-    
+
     if collection_name is None:
         raise ValueError("Collection name is required")
     
@@ -19,7 +20,7 @@ def create_vector_store(
     vector_store = Chroma(
         collection_name=collection_name,
         embedding_function=embedding_function,
-        persist_directory=persist_directory
+        persist_directory=settings.persist_directory
     )
     vector_store.add_documents(chunks)
     return vector_store
@@ -27,15 +28,15 @@ def create_vector_store(
 
 def load_vector_store(
     collection_name: str = None, 
-    embedding_function: Embeddings = None, 
-    persist_directory: str = "./chroma_langchain_db"):
+    embedding_function: Embeddings = None
+):
     ''' Load and return an existing Chroma vector store from disk '''
 
     if collection_name is None:
         raise ValueError("Collection name is required")
     
-    if not os.path.exists(persist_directory):
-        raise FileNotFoundError(f"Persist directory '{persist_directory}' does not exist. Please create the vector store first.")
+    if not Path(settings.persist_directory).exists():
+        raise FileNotFoundError(f"Persist directory '{settings.persist_directory}' does not exist. Please create the vector store first.")
     
     if embedding_function is None:
         embedding_function = get_embeddings()
@@ -43,6 +44,6 @@ def load_vector_store(
     return Chroma(
         collection_name=collection_name,
         embedding_function=embedding_function,
-        persist_directory=persist_directory
+        persist_directory=settings.persist_directory
     )
     

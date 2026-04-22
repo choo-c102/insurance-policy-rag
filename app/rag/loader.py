@@ -1,5 +1,5 @@
-import os
 from langchain_community.document_loaders import PyMuPDFLoader 
+from pathlib import Path
 
 def load_documents(file_path: str):
     '''
@@ -7,7 +7,7 @@ def load_documents(file_path: str):
     Returns a list of documents (each document is a page in the PDF)
     '''
 
-    if not os.path.isfile(file_path):
+    if not Path(file_path).is_file():
         raise FileNotFoundError(f"No file found at path: {file_path}")
     
     if not file_path.lower().endswith('.pdf'):
