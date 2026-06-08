@@ -12,11 +12,12 @@ from pathlib import Path
 from app.rag.loader import load_documents
 from app.rag.chunker import split_into_chunks
 from app.rag.vectorstore import create_vector_store
+from app.core.collections import save_collection
 
 router = APIRouter()
 
 @router.post("/upload")
-async def upload_policy(file: UploadFile = File(...)):
+async def upload_process_policy(file: UploadFile = File(...)):
     if not file.filename.endswith('.pdf'):  # Validate uploaded file is a PDF
         raise HTTPException(status_code=400, detail="File must be a PDF")
 
@@ -35,6 +36,7 @@ async def upload_policy(file: UploadFile = File(...)):
             chunks, 
             collection_name=collection_name
         ) # Create vector store
+        save_collection(collection_name)
 
     finally:
         if temp_path.exists():

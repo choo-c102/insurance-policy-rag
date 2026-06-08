@@ -1,51 +1,18 @@
-'''
-Accept a user query and a collection name
-Run the query through the RAG chain
-Return the generated answer
-'''
-
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-
 from app.rag.retriever import run_rag_chain
+from app.core.collections import get_stored_collections
 
 router = APIRouter()
-
-
 class QueryRequest(BaseModel):
-    question: str
-    collection_name: str
-    prompt_name: str = "rag"
-    provider: str = "anthropic"
+    query: str
 
-
-class QueryResponse(BaseModel):
-    question: str
-    answer: str
-    collection_name: str
-
-
-@router.post("/query", response_model=QueryResponse)
-async def query_policy(request: QueryRequest):
-    if not request.question.strip():
-        raise HTTPException(status_code=400, detail="Question must not be empty")
-
+@router.post("/query/{collection_name}")
+async def query_policy(collection_name: str, query_request: QueryRequest):
+    if collection_name not in get_stored_collections(): #Check if collection name is valid
+        raise HTTPException(status_code=404, detail=f"Collection name '{collection_name}' not found. Please select a policy from the list of available policies.")
+    
     try:
-        answer = run_rag_chain(
-            query=request.question,
-            collection_name=request.collection_name,
-            prompt_name=request.prompt_name,
-            provider=request.provider,
-        )
-    except FileNotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        return run_rag_chain(query=query_request.query, collection_name=collection_name)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"An error occurred while processing the query: {e}")
-
-    return QueryResponse(
-        question=request.question,
-        answer=answer,
-        collection_name=request.collection_name,
-    )
+        raise HTTPException(status_code=500, detail=f"Error querying policy: {str(e)}")
